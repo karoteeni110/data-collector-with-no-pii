@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PII Detection App</title>
+  </head>
+  <body>
+    <h1>Submit an SMS Message</h1>
+    <form method="POST" action="/">
+      <textarea name="message" rows="5" cols="40">{{ message }}</textarea>
+      <br />
+      <input type="submit" value="Submit">
+    </form>
+
+    {% if redacted_message %}
+      <h2>Confirmation</h2>
+      <p>Original Message: {{ message }}</p>
+      <p>Redacted Message: {{ redacted_message }}</p>
+      <form method="POST" action="/submit">
+        <input type="hidden" name="message" value="{{ redacted_message }}">
+        <input type="submit" value="Submit the Redacted Message">
+      </form>
+    {% elif message %}
+      <h2>No PII Detected</h2>
+      <p>Original Message: {{ message }}</p>
+      <form method="POST" action="/submit">
+        <input type="hidden" name="message" value="{{ message }}">
+        <input type="submit" value="Confirm and Submit">
+      </form>
+    {% endif %}
+
+    {% if success_message %}
+      <h2>{{ success_message }}</h2>
+    {% endif %}
+  </body>
+</html>
+
